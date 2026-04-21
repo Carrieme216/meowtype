@@ -1,1 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MeowType: Cat Personality Test</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <style>
+      :root {
+        --yellow: #ffe066;
+        --soft-yellow: #fff6cc;
+        --orange: #ff9f1c;
+        --brown: #5a3e1b;
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", "PingFang HK", sans-serif;
+        background: linear-gradient(180deg, var(--yellow), var(--soft-yellow));
+        color: var(--brown);
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .card {
+        background: white;
+        padding: 25px;
+        border-radius: 25px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+      }
+      nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 15px;
+        background: white;
+        border-radius: 20px;
+        position: sticky;
+        top: 10px;
+        z-index: 100;
+      }
+      .nav-icon {
+        font-size: 24px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        transition: 0.3s;
+        padding: 5px 15px;
+        border-radius: 10px;
+      }
+      .nav-icon:hover {
+        background: var(--soft-yellow);
+      }
+      .btn-custom {
+        width: 100%;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        background: var(--soft-yellow);
+        font-size: 16px;
+        transition: 0.2s;
+        text-align: left;
+        color: var(--brown);
+      }
+      .primary-btn {
+        background: var(--orange) !important;
+        color: white !important;
+        text-align: center !important;
+        font-weight: bold;
+        width: 100%;
+        border-radius: 15px;
+        padding: 15px;
+        border: none;
+        cursor: pointer;
+      }
+      .secondary-btn {
+        background: #f8f8f8;
+        color: #aaa;
+        text-align: center;
+        font-size: 14px;
+        margin-top: 10px;
+        border: 1px solid #eee;
+        width: 100%;
+        border-radius: 15px;
+        padding: 10px;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .lang-switch {
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        color: var(--orange);
+      }
+      .cat-img {
+        width: 100%;
+        max-width: 300px;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .wiki-card {
+        border-bottom: 2px dashed var(--soft-yellow);
+        padding: 20px 0;
+        text-align: center;
+      }
+      .center {
+        text-align: center !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="loading-layer"
+      class="hidden"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, var(--yellow), var(--soft-yellow));
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <video
+        id="loading-video"
+        width="85%"
+        style="max-width: 400px; border-radius: 15px"
+        muted
+        playsinline
+        loop
+      >
+        <source src="loading-cat.mp4" type="video/mp4" />
+      </video>
+      <p
+        id="loading-text"
+        style="
+          margin-top: 20px;
+          font-weight: bold;
+          color: var(--brown);
+          text-align: center;
+        "
+      ></p>
+    </div>
 
+    <div class="container">
+      <nav>
+        <button class="nav-icon" onclick="showPage('home')">🏠</button>
+        <button class="nav-icon" onclick="showPage('info')">📚</button>
+        <button class="nav-icon" onclick="showPage('contact')">✉️</button>
+        <div class="lang-switch" onclick="toggleLang()">EN / 中</div>
+      </nav>
+
+      <div id="home" class="page">
+        <div class="card center">
+          <div class="image-box">
+            <img
+              src="https://scontent-lax3-2.xx.fbcdn.net/v/t39.30808-6/486055273_1140641704773867_7445109794186189067_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=107&ccb=1-7&_nc_sid=13d280&_nc_ohc=9k0WjrM8x9IQ7kNvwHp29m9&_nc_oc=Adqmz4-QkQO6SfqldlCwHUVNHLGJGa7yrOV1ALtQaPrK41uUesIWu7DB9YyExUUxfDE&_nc_zt=23&_nc_ht=scontent-lax3-2.xx&_nc_gid=dQaDIIO6bG1pf88MLj7NRA&_nc_ss=7a389&oh=00_Af2Nl2T2mbrhjhnkOz2928iNbjv9Y__y61MnmUCURQ3YvA&oe=69EB8F35"
+              class="cat-img"
+            />
+          </div>
+          <h1 data-zh="你是哪種小貓？🐱" data-en="What Kind of Cat Are You?">
+            你是哪種小貓？🐱
+          </h1>
+          <p
+            data-zh="測試你內心的貓咪人格"
+            data-en="Discover your inner feline personality"
+          >
+            測試你內心的貓咪人格
+          </p>
+          <button
+            class="primary-btn"
+            onclick="startQuiz()"
+            data-zh="開始測試"
+            data-en="Start Quiz"
+          >
+            開始測試
+          </button>
+        </div>
+      </div>
+
+      <div id="quiz" class="page hidden">
+        <div class="card">
+          <div
+            style="
+              width: 100%;
+              background: var(--soft-yellow);
+              height: 10px;
+              border-radius: 5px;
+              margin: 35px 0 20px;
+              position: relative;
+            "
+          >
+            <div
+              id="progress-bar"
+              style="
+                width: 0%;
+                height: 100%;
+                background: var(--orange);
+                border-radius: 5px;
+                transition: 0.5s;
+              "
+            ></div>
+            <div
+              id="cat-runner"
+              style="
+                position: absolute;
+                top: -25px;
+                left: 0%;
+                transform: translateX(-50%);
+                transition: 0.5s;
+                font-size: 20px;
+              "
+            >
+              🐱
+            </div>
+          </div>
+          <p
+            id="progress"
+            class="center"
+            style="color: var(--orange); font-weight: bold"
+          >
+            1 / 10
+          </p>
+          <h2
+            id="question"
+            class="center title is-4"
+            style="color: var(--brown)"
+          ></h2>
+          <div id="options"></div>
+          <button
+            id="prev-btn"
+            class="secondary-btn hidden"
+            onclick="prevQuestion()"
+            data-zh="← 返回上一題"
+            data-en="← Previous Question"
+          >
+            ← 返回上一題
+          </button>
+        </div>
+      </div>
+
+      <div id="result" class="page hidden">
+        <div class="card center">
+          <h2
+            data-zh="你的貓咪人格是——"
+            data-en="Your Result is—"
+            class="title is-4"
+          >
+            你的貓咪人格是——
+          </h2>
+          <h1 id="type" class="title is-2" style="color: var(--orange)"></h1>
+          <div class="image-box">
+            <img id="catImg" src="" class="cat-img" />
+          </div>
+          <p
+            id="why"
+            style="
+              font-size: 14px;
+              color: #777;
+              font-style: italic;
+              margin-bottom: 10px;
+            "
+          ></p>
+          <p id="desc" style="font-size: 18px; line-height: 1.6"></p>
+          <button
+            class="primary-btn"
+            onclick="location.reload()"
+            data-zh="再測一次"
+            data-en="Retake Quiz"
+          >
+            再測一次
+          </button>
+        </div>
+      </div>
+
+      <div id="info" class="page hidden">
+        <div class="card">
+          <h2
+            data-zh="🐱 貓咪百科"
+            data-en="🐱 Cat Encyclopedia"
+            class="center title is-4"
+          >
+            🐱 貓咪百科
+          </h2>
+          <div id="encyclopedia-content"></div>
+          <button
+            class="primary-btn"
+            onclick="showPage('home')"
+            data-zh="返回首頁"
+            data-en="Back Home"
+          >
+            返回首頁
+          </button>
+        </div>
+      </div>
+
+      <div id="contact" class="page hidden">
+        <div class="card center">
+          <h2 data-zh="聯絡我們" data-en="Contact Us" class="title is-4">
+            聯絡我們
+          </h2>
+          <img
+            src="Carrie.jpg"
+            style="
+              width: 120px;
+              border-radius: 50%;
+              background: var(--soft-yellow);
+              margin: 20px 0;
+            "
+          />
+          <h3 class="subtitle">Carrie</h3>
+          <p>
+            📧 Email:
+            <a
+              href="mailto:1958842391@qq.com"
+              style="color: var(--orange); font-weight: bold"
+              >1958842391@qq.com</a
+            >
+          </p>
+          <p
+            data-zh="翻譯員 / 網頁開發者"
+            data-en="Translator / Website Developer"
+          >
+            翻譯員 / 網頁開發者
+          </p>
+          <button
+            class="secondary-btn"
+            onclick="showPage('home')"
+            data-zh="返回"
+            data-en="Back"
+          >
+            返回
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentLang = "zh";
+      let index = 0,
+        score = 0;
+      let answerHistory = [];
+      window.currentCat = null;
+
+      const questions = [
+        {
+          qz: "1. 在一個熱鬧的聚會中，你通常扮演什麼角色？",
+          qe: "1. What role do you usually play in a large party?",
+          opts: [
+            { tz: "氣氛帶動者", ez: "The icebreaker", s: 4 },
+            { tz: "與熟識朋友聚在一起", ez: "Hanging with friends", s: 3 },
+            { tz: "安靜待著觀察", ez: "Staying quiet", s: 2 },
+            { tz: "想盡快回家", ez: "Wanting to go home", s: 1 },
+          ],
+        },
+        {
+          qz: "2. 遇到突如其來的變化，你的反應是？",
+          qe: "2. Your reaction to a sudden change?",
+          opts: [
+            { tz: "非常興奮迎接挑戰", ez: "Very excited", s: 4 },
+            { tz: "感到好奇詢問細節", ez: "Curious for details", s: 3 },
+            { tz: "有些緊張需時間消化", ez: "Nervous and processing", s: 2 },
+            { tz: "感到排斥維持原狀", ez: "Resistant to change", s: 1 },
+          ],
+        },
+        {
+          qz: "3. 當想要尋求關注時，你會？",
+          qe: "3. When you seek attention...",
+          opts: [
+            { tz: "直接表達甚至纏人", ez: "Express directly", s: 4 },
+            { tz: "撒嬌暗示主動靠近", ez: "Hinting subtly", s: 3 },
+            { tz: "默默待在對方身邊", ez: "Staying quietly", s: 2 },
+            { tz: "不主動等別人發現", ez: "Waiting to be noticed", s: 1 },
+          ],
+        },
+        {
+          qz: "4. 你的理想週末生活步調？",
+          qe: "4. Your ideal weekend?",
+          opts: [
+            { tz: "排滿行程探索新景點", ez: "Full schedule", s: 4 },
+            { tz: "與親近的人吃頓好飯", ez: "Dining with others", s: 3 },
+            { tz: "在家做手工或閱讀", ez: "Staying home", s: 2 },
+            { tz: "徹底斷聯睡到自然醒", ez: "Sleeping in", s: 1 },
+          ],
+        },
+        {
+          qz: "5. 受委屈時，你傾向？",
+          qe: "5. When being wronged...",
+          opts: [
+            { tz: "立刻反擊或傾訴", ez: "Fighting back", s: 4 },
+            { tz: "找信任的人尋求建議", ez: "Seeking advice", s: 3 },
+            { tz: "冷靜分析後自己處理", ez: "Handling it alone", s: 2 },
+            { tz: "縮進小空間獨自消化", ez: "Withdrawing", s: 1 },
+          ],
+        },
+        {
+          qz: "6. 關於生活環境的整潔？",
+          qe: "6. Regarding cleanliness...",
+          opts: [
+            { tz: "亂點沒關係", ez: "Messy is fine", s: 4 },
+            { tz: "定期整理舒適就好", ez: "Regular tidying", s: 3 },
+            { tz: "物品必須有固定位置", ez: "Everything in place", s: 2 },
+            { tz: "極簡主義不能有雜物", ez: "No clutter", s: 1 },
+          ],
+        },
+        {
+          qz: "7. 對於冒險，你的態度？",
+          qe: "7. Attitude towards adventure?",
+          opts: [
+            { tz: "越刺激越好", ez: "The more exciting the better", s: 4 },
+            { tz: "嘗試有保障的新事物", ez: "Try safe new things", s: 3 },
+            { tz: "待在熟悉的舒適區", ez: "Comfort zone", s: 2 },
+            { tz: "冒險太累了平淡就好", ez: "Adventure is tiring", s: 1 },
+          ],
+        },
+        {
+          qz: "8. 別人的第一印象？",
+          qe: "8. First impression you give?",
+          opts: [
+            { tz: "熱情洋溢自來熟", ez: "Enthusiastic", s: 4 },
+            { tz: "溫文儒雅有禮貌", ez: "Gentle and polite", s: 3 },
+            { tz: "有點神秘看不太透", ez: "Mysterious", s: 2 },
+            { tz: "高冷孤僻難以接近", ez: "Cold and aloof", s: 1 },
+          ],
+        },
+        {
+          qz: "9. 專注工作時，你喜歡？",
+          qe: "9. When you need to focus...",
+          opts: [
+            { tz: "熱鬧咖啡廳背景音", ez: "Busy cafe", s: 4 },
+            { tz: "朋友在旁邊一起努力", ez: "With friends", s: 3 },
+            { tz: "絕對安靜圖書館", ez: "Quiet library", s: 2 },
+            { tz: "深夜房間沒人打擾", ez: "Room late at night", s: 1 },
+          ],
+        },
+        {
+          qz: "10. 你如何看待社交規則？",
+          qe: "10. View on social rules?",
+          opts: [
+            { tz: "用來打破的自由重要", ez: "Meant to be broken", s: 4 },
+            { tz: "靈活調整行為", ez: "Adjust accordingly", s: 3 },
+            { tz: "尊重規則讓大家輕鬆", ez: "Respect rules", s: 2 },
+            { tz: "感到拘束壓力", ez: "Feel restrictive", s: 1 },
+          ],
+        },
+      ];
+
+      const catData = {
+        orange: {
+          zh: "大橘貓 🧡",
+          en: "Ginger Cat 🧡",
+          why_zh: "判定原因：得分 > 32。",
+          why_en: "Why: Score > 32.",
+          desc_zh:
+            "你是天生的靈魂人物，熱情大方。你很容易靠近別人，內心非常自由。",
+          desc_en:
+            "A natural social star. You approach others easily and are truly free-spirited.",
+          img: "https://www.niusnews.com/upload/imgs/default/202109_Jennie/0910gingercat/michael-sum-LEpfefQf4rU-unsplash.jpg",
+        },
+        siamese: {
+          zh: "暹羅貓 🗣",
+          en: "Siamese Cat 🗣",
+          why_zh: "判定原因：得分 26-32。",
+          why_en: "Why: Score 26-32.",
+          desc_zh: "你好奇且黏人，討厭被忽視。你需要不斷的互動來確認連結。",
+          desc_en:
+            "Curious and clingy. You hate being ignored and need constant interaction.",
+          img: "https://www.catraws.com/wp-content/uploads/2023/01/%E6%9A%B9%E7%BE%85%E8%B2%93-%E6%96%9C%E8%A6%96.jpeg",
+        },
+        calico: {
+          zh: "三花貓 🎭",
+          en: "Calico Cat 🎭",
+          why_zh: "判定原因：得分 18-25。",
+          why_en: "Why: Score 18-25.",
+          desc_zh:
+            "你有著迷人的多面性格，時而熱情時而冷靜。沒人能掌控你的節奏。",
+          desc_en:
+            "Charming multi-faceted personality. No one can control your emotional rhythm.",
+          img: "https://www.popdaily.com.tw/shaper/u/202201/db0195a3-1812-49ba-9e86-06b5ebce5e53.jpg?resize-w=1300&resize-h=676&format=webp",
+        },
+        ragdoll: {
+          zh: "布偶貓 ☁️",
+          en: "Ragdoll Cat ☁️",
+          why_zh: "判定原因：得分 12-17。",
+          why_en: "Why: Score 12-17.",
+          desc_zh:
+            "溫柔平和，你是朋友圈中最治癒的存在。你選擇以溫和方式與世界相處。",
+          desc_en:
+            "Gentle and peaceful. You choose to interact with the world gracefully.",
+          img: "https://www.chiencattery.com.tw/wp-content/uploads/2023/11/Blue-Point-Mitted-Girl.jpg",
+        },
+        black: {
+          zh: "黑貓 🖤",
+          en: "Black Cat 🖤",
+          why_zh: "判定原因：得分 < 12。",
+          why_en: "Why: Score < 12.",
+          desc_zh: "優雅神祕，你習慣在安靜中觀察。你不缺感情，只是不隨便給予。",
+          desc_en:
+            "Elegant and mysterious. You have deep emotions but are highly selective.",
+          img: "https://www.worldanimalprotection.org.cn/siteassets/article/image004_6.jpg?width=1536&fit=cover",
+        },
+      };
+
+      function showPage(pageId) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.add("hidden"));
+        document.getElementById(pageId).classList.remove("hidden");
+        if (pageId === "info") renderEncyclopedia();
+      }
+
+      function toggleLang() {
+        currentLang = currentLang === "zh" ? "en" : "zh";
+        document.querySelectorAll("[data-zh]").forEach((el) => {
+          el.innerText = el.getAttribute("data-" + currentLang);
+        });
+        if (!document.getElementById("quiz").classList.contains("hidden"))
+          showQuestion();
+        if (!document.getElementById("result").classList.contains("hidden"))
+          updateResultUI();
+        if (!document.getElementById("info").classList.contains("hidden"))
+          renderEncyclopedia();
+      }
+
+      function startQuiz() {
+        const loader = document.getElementById("loading-layer");
+        const video = document.getElementById("loading-video");
+        const loadingText = document.getElementById("loading-text");
+        loadingText.innerHTML =
+          currentLang === "zh"
+            ? "正在分析你的貓咪靈魂...<br><small>Analyzing your feline soul...</small>"
+            : "Analyzing your feline soul...";
+        if (video) {
+          video.currentTime = 0;
+          video.play();
+        }
+        loader.classList.remove("hidden");
+        setTimeout(() => {
+          index = 0;
+          score = 0;
+          answerHistory = [];
+          loader.classList.add("hidden");
+          showPage("quiz");
+          showQuestion();
+        }, 2000);
+      }
+
+      function showQuestion() {
+        let q = questions[index];
+        document.getElementById("question").innerText =
+          currentLang === "zh" ? q.qz : q.qe;
+        document.getElementById("progress").innerText = `${index + 1} / ${
+          questions.length
+        }`;
+        let percent = ((index + 1) / questions.length) * 100;
+        document.getElementById("progress-bar").style.width = percent + "%";
+        document.getElementById("cat-runner").style.left = percent + "%";
+        if (index === 0)
+          document.getElementById("prev-btn").classList.add("hidden");
+        else document.getElementById("prev-btn").classList.remove("hidden");
+
+        let html = "";
+        q.opts.forEach((o) => {
+          let text = currentLang === "zh" ? o.tz : o.ez;
+          html += `<button class="btn-custom" onclick="answer(${o.s})">${text}</button>`;
+        });
+        document.getElementById("options").innerHTML = html;
+      }
+
+      function answer(s) {
+        answerHistory.push(s);
+        score += s;
+        index++;
+        if (index < questions.length) showQuestion();
+        else calculateResult();
+      }
+
+      function prevQuestion() {
+        if (index > 0) {
+          let lastS = answerHistory.pop();
+          score -= lastS;
+          index--;
+          showQuestion();
+        }
+      }
+
+      function calculateResult() {
+        const loader = document.getElementById("loading-layer");
+        const video = document.getElementById("loading-video");
+        const loadingText = document.getElementById("loading-text");
+        loadingText.innerHTML =
+          currentLang === "zh" ? "正在計算性格得分..." : "Calculating score...";
+        if (video) {
+          video.currentTime = 0;
+          video.play();
+        }
+        loader.classList.remove("hidden");
+        setTimeout(() => {
+          loader.classList.add("hidden");
+          window.currentCat =
+            score > 32
+              ? catData.orange
+              : score > 25
+              ? catData.siamese
+              : score > 17
+              ? catData.calico
+              : score > 11
+              ? catData.ragdoll
+              : catData.black;
+          showPage("result");
+          updateResultUI();
+        }, 2000);
+      }
+
+      function updateResultUI() {
+        if (!window.currentCat) return;
+        const cat = window.currentCat;
+        document.getElementById("type").innerText = cat[currentLang];
+        document.getElementById("why").innerText = cat["why_" + currentLang];
+        document.getElementById("desc").innerText = cat["desc_" + currentLang];
+        document.getElementById("catImg").src = cat.img;
+      }
+
+      function renderEncyclopedia() {
+        let html = "";
+        for (let key in catData) {
+          let c = catData[key];
+          html += `<div class="wiki-card"><br><img src="${
+            c.img
+          }" class="cat-img"><br><h3>${
+            c[currentLang]
+          }</h3><p style="padding:0 20px">${
+            c["desc_" + currentLang]
+          }</p><br></div>`;
+        }
+        document.getElementById("encyclopedia-content").innerHTML = html;
+      }
+    </script>
+  </body>
+</html>
